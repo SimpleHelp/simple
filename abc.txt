@@ -1,0 +1,689 @@
+1. Perform the following operations using Python on a data set : read data
+from different formats(like csv, xls),indexing and selecting data, sort data,
+describe attributes of data, checking data types of each column. (Use
+Titanic Dataset).
+------------------------------------
+
+# Step 1: Import libraries
+import pandas as pd
+
+# Step 2: Read Titanic dataset (CSV file)
+
+titanic_csv = pd.read_csv("titanic.csv")
+print("CSV Data Loaded Successfully\n")
+print(titanic_csv.head())
+
+# Step 3: Read Titanic dataset (Excel file)
+
+titanic_xls = pd.read_excel("titanic.xls")
+print("\nExcel Data Loaded Successfully\n")
+print(titanic_xls.head())
+
+# Step 4: Indexing and Selecting Columns
+
+print("\nSelecting 'Name' and 'Age' columns:\n")
+print(titanic_csv[['Name', 'Age']].head())
+
+print("\nSelecting first 5 rows using index:\n")
+print(titanic_csv.iloc[0:5])
+
+# Step 5: Sorting Data
+
+print("\nData Sorted by Age:\n")
+print(titanic_csv.sort_values(by="Age").head())
+
+print("\nData Sorted by Fare (Descending):\n")
+print(titanic_csv.sort_values(by="Fare", ascending=False).head())
+
+# Step 6: Describe Data Attributes
+
+print("\nDescribing Numeric Columns:\n")
+print(titanic_csv.describe())
+
+print("\nDescribing All Columns:\n")
+print(titanic_csv.describe(include="all"))
+
+# Step 7: Checking Data Types of Each Column
+
+print("\nData Types of Columns:\n")
+print(titanic_csv.dtypes)
+
+--------------------------------------------------------------------------------------------
+2. Perform the following operations using Python on the Telecom_Churn
+dataset. Compute and display summary statistics for each feature available
+in the dataset using separate commands for each statistic. (e.g. minimum
+value, maximum value, mean, range, standard deviation, variance and
+percentiles).
+-------------------------------------
+
+# Step 1: Import libraries
+
+import pandas as pd
+
+# Step 2: Load the Telecom_Churn dataset
+# Make sure the file Telecom_Churn.csv is in the same folder
+
+df = pd.read_csv("Telecom_Churn.csv")
+
+# Display first 5 rows
+
+print("\n=== DATASET LOADED ===\n")
+print(df.head())
+
+# Step 3: Select only numeric columns for statistical analysis
+
+numeric_cols = df.select_dtypes(include=['int64', 'float64'])
+print("\n=== NUMERIC FEATURES ===\n")
+print(numeric_cols.columns)
+
+# Step 4: Minimum value for each feature
+
+print("\n=== MINIMUM VALUES ===\n")
+print(numeric_cols.min())
+
+# Step 5: Maximum value for each feature
+
+print("\n=== MAXIMUM VALUES ===\n")
+print(numeric_cols.max())
+
+# Step 6: Mean for each feature
+
+print("\n=== MEAN VALUES ===\n")
+print(numeric_cols.mean())
+
+# Step 7: Range (max - min) for each feature
+
+print("\n=== RANGE (MAX - MIN) ===\n")
+print(numeric_cols.max() - numeric_cols.min())
+
+# Step 8: Standard Deviation
+
+print("\n=== STANDARD DEVIATION ===\n")
+print(numeric_cols.std())
+
+# Step 9: Variance
+
+print("\n=== VARIANCE ===\n")
+print(numeric_cols.var())
+
+# Step 10: Percentiles (25%, 50%, 75%)
+
+print("\n=== PERCENTILES (25th, 50th, 75th) ===\n")
+percentiles = numeric_cols.quantile([0.25, 0.5, 0.75])
+print(percentiles)
+
+
+
+
+
+-------------------------------------------------------------------------------------------
+3. Perform the following operations using Python on the data set
+House_Price Prediction dataset. Compute standard deviation, variance and
+percentiles using separate commands, for each feature. Create a histogram
+for each feature in the dataset to illustrate the feature distributions.
+
+# ---- House Price Prediction Dataset Analysis ----
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+
+# 1. Load Dataset
+
+df = pd.read_csv("House_Price_Prediction.csv")     # Change filename if needed
+
+# 2. Select Numeric Features
+
+num_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+
+# 3. Handle Missing Numeric Values (Median Fill)
+
+df[num_cols] = df[num_cols].fillna(df[num_cols].median())
+
+# 4. Compute Summary Statistics
+
+print("----- Standard Deviation -----")
+print(df[num_cols].std(), "\n")
+
+print("----- Variance -----")
+print(df[num_cols].var(), "\n")
+
+print("----- Percentiles (25th, 50th, 75th) -----")
+print(df[num_cols].quantile([0.25, 0.50, 0.75]), "\n")
+
+# 5. Create Histograms for All Numeric Features
+
+os.makedirs("histograms", exist_ok=True)
+
+for col in num_cols:
+    plt.figure(figsize=(6, 4))
+    plt.hist(df[col], bins=30)
+    plt.title(f"Histogram of {col}")
+    plt.xlabel(col)
+    plt.ylabel("Frequency")
+    plt.tight_layout()
+    plt.savefig(f"histograms/{col}_hist.png")  
+    plt.show()
+----------------------------------------------------------------------------------------
+ 4. Write a program to do: A dataset collected in a cosmetics shop showing
+details of customers and whether or not they responded to a special offer
+to buy a new lip-stick is shown in table below. (Implement step by step
+using commands - Dont use library) Use this dataset to build a decision
+tree, with Buys as the target variable, to help in buying lipsticks in the
+future. Find the root node of the decision tree.
+-------------------------------------------------
+
+import math
+
+
+# 1. Sample lipstick dataset (same as given)
+
+
+data = [
+    {"Age": "Young",  "Income": "High",   "Loyalty": "NonMember", "Buys": "No"},
+    {"Age": "Young",  "Income": "High",   "Loyalty": "Member",    "Buys": "No"},
+    {"Age": "Young",  "Income": "Medium", "Loyalty": "NonMember", "Buys": "Yes"},
+    {"Age": "Middle", "Income": "High",   "Loyalty": "NonMember", "Buys": "Yes"},
+    {"Age": "Senior", "Income": "Low",    "Loyalty": "Member",    "Buys": "Yes"},
+    {"Age": "Senior", "Income": "Low",    "Loyalty": "NonMember", "Buys": "No"},
+    {"Age": "Senior", "Income": "Medium", "Loyalty": "NonMember", "Buys": "Yes"},
+    {"Age": "Middle", "Income": "Low",    "Loyalty": "Member",    "Buys": "Yes"},
+    {"Age": "Middle", "Income": "Medium", "Loyalty": "NonMember", "Buys": "Yes"},
+    {"Age": "Young",  "Income": "Low",    "Loyalty": "Member",    "Buys": "No"},
+]
+
+target_attr = "Buys"
+
+
+
+# 2. Return values of a column
+
+def get_column(data, attr):
+    return [row[attr] for row in data]
+
+
+# 3. Entropy function
+
+def entropy(class_values):
+    total = len(class_values)
+    value_counts = {}
+    
+    # count frequency of labels
+    for v in class_values:
+        value_counts[v] = value_counts.get(v, 0) + 1
+
+    ent = 0.0
+    for count in value_counts.values():
+        p = count / total
+        ent -= p * math.log2(p)
+
+    return ent
+
+
+
+# 4. Information Gain
+
+def information_gain(data, attr, target_attr):
+    total_entropy = entropy(get_column(data, target_attr))
+    total_len = len(data)
+
+    values = set(get_column(data, attr))
+
+    weighted_entropy = 0
+    for v in values:
+        subset = [row for row in data if row[attr] == v]
+        subset_labels = get_column(subset, target_attr)
+        subset_entropy = entropy(subset_labels)
+        weight = len(subset) / total_len
+        weighted_entropy += weight * subset_entropy
+
+    return total_entropy - weighted_entropy
+
+
+# 5. Find best attribute (max IG)
+
+def find_best_attribute(data, target_attr):
+    attributes = list(data[0].keys())
+    attributes.remove(target_attr)
+
+    best_attr = None
+    best_ig = -1
+
+    print("Information Gain for each attribute:\n")
+
+    for attr in attributes:
+        ig = information_gain(data, attr, target_attr)
+        print(f"IG({attr}) = {ig:.4f}")
+        if ig > best_ig:
+            best_ig = ig
+            best_attr = attr
+
+    return best_attr, best_ig
+
+
+# 6. Main driver
+
+best_attr, best_ig = find_best_attribute(data, target_attr)
+
+print("\n====================================")
+print(" ROOT NODE of the decision tree is:")
+print("  Attribute:", best_attr)
+print("  Information Gain:", best_ig)
+print("====================================")
+
+---------------------------------------------------------------------------------------
+5. Write a program to do: A dataset collected in a cosmetics shop showing
+details of customers and whether or not they responded to a special offer
+to buy a new lip-stick is shown in table below. (Use library commands)
+According to the decision tree you have made from the previous training
+data set, what is the decision for the test data: [Age &lt; 21, Income = Low,
+Gender = Female, Marital Status = Married]?
+------------------------------------------
+# Step 1: Import libraries
+
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier, export_text
+
+# Step 2: Import dataset (Make sure cosmetics.csv is in the same folder)
+
+
+# Age, Income, Gender, Marital, Responded
+df = pd.read_csv("cosmetics.csv")
+
+print("\n=== DATASET LOADED SUCCESSFULLY ===\n")
+print(df)
+
+# Step 3: Convert categorical columns to numerical using one-hot encoding
+
+X = pd.get_dummies(df.drop(columns=['Responded']))
+y = (df['Responded'] == 'Yes').astype(int)
+
+# Step 4: Train Decision Tree
+
+clf = DecisionTreeClassifier(random_state=0)
+clf.fit(X, y)
+
+# Step 5: Show decision tree rules
+
+print("\n=== DECISION TREE RULES ===\n")
+print(export_text(clf, feature_names=list(X.columns)))
+
+# Step 6: Test data given in the question
+
+test_data = {
+    'Age': '<21',
+    'Income': 'Low',
+    'Gender': 'Female',
+    'Marital': 'Married'
+}
+
+test_df = pd.DataFrame([test_data])
+test_X = pd.get_dummies(test_df)
+
+for col in X.columns:
+    if col not in test_X.columns:
+        test_X[col] = 0
+test_X = test_X[X.columns]
+
+# Step 7: Predict
+
+prediction = clf.predict(test_X)[0]
+proba = clf.predict_proba(test_X)[0]
+
+print("\n=== TEST CASE ===")
+print(test_df)
+
+print("\nPrediction (1 = Yes, 0 = No):", prediction)
+print("Probability → No =", proba[0], ", Yes =", proba[1])
+
+if prediction == 1:
+    print("\nFINAL DECISION: Customer WILL respond to the lipstick offer.")
+else:
+    print("\nFINAL DECISION: Customer will NOT respond to the lipstick offer.")
+
+
+----------------------------------------------------------------------------------------
+6. Write a program to do: A dataset collected in a cosmetics shop showing
+details of customers and whether or not they responded to a special offer
+to buy a new lip-stick is shown in table below. (Use library commands)
+According to the decision tree you have made from the previous training
+data set, what is the decision for the test data: [Age &gt; 35, Income =
+Medium, Gender = Female, Marital Status = Married]?
+----------------------------------------
+
+# Step 1: Import libraries
+
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier, export_text
+
+# Step 2: Create the dataset (replace with your own table if needed)
+
+data = [
+    {'Age': '<=35', 'Income':'High',   'Gender':'Female', 'Marital':'Single', 'Responded':'No'},
+    {'Age': '<=35', 'Income':'High',   'Gender':'Male',   'Marital':'Single', 'Responded':'No'},
+    {'Age': '>35',  'Income':'Low',    'Gender':'Female', 'Marital':'Married','Responded':'Yes'},
+    {'Age': '>35',  'Income':'Medium', 'Gender':'Female', 'Marital':'Married','Responded':'Yes'},
+    {'Age': '<=35', 'Income':'Medium', 'Gender':'Female', 'Marital':'Married','Responded':'No'},
+    {'Age': '>35',  'Income':'Medium', 'Gender':'Male',   'Marital':'Married','Responded':'Yes'},
+    {'Age': '<=35', 'Income':'Low',    'Gender':'Male',   'Marital':'Single', 'Responded':'No'},
+    {'Age': '>35',  'Income':'High',   'Gender':'Female', 'Marital':'Married','Responded':'Yes'},
+    {'Age': '<=35', 'Income':'Medium', 'Gender':'Male',   'Marital':'Single', 'Responded':'No'},
+    {'Age': '>35',  'Income':'Medium', 'Gender':'Female', 'Marital':'Single', 'Responded':'Yes'},
+    {'Age': '<=35', 'Income':'Low',    'Gender':'Female', 'Marital':'Married','Responded':'No'},
+    {'Age': '>35',  'Income':'High',   'Gender':'Male',   'Marital':'Married','Responded':'Yes'}
+]
+
+df = pd.DataFrame(data)
+
+# Step 3: One-hot encode categorical data
+
+X = pd.get_dummies(df.drop(columns=['Responded']))
+y = (df['Responded'] == 'Yes').astype(int)
+
+# Step 4: Train the Decision Tree
+
+clf = DecisionTreeClassifier(random_state=0)
+clf.fit(X, y)
+
+# Step 5: Display decision tree rules
+
+feature_names = list(X.columns)
+print("\nDecision Tree Rules:\n")
+print(export_text(clf, feature_names=feature_names))
+
+# Step 6: Prepare test instance
+
+test = {'Age': '>35', 'Income': 'Medium', 'Gender': 'Female', 'Marital': 'Married'}
+test_df = pd.DataFrame([test])
+test_X = pd.get_dummies(test_df)
+
+# Align test columns with training input columns
+
+for col in X.columns:
+    if col not in test_X.columns:
+        test_X[col] = 0
+test_X = test_X[X.columns]
+
+# Step 7: Predict
+
+prediction = clf.predict(test_X)[0]
+proba = clf.predict_proba(test_X)[0]
+
+print("\nTest Case:", test)
+print("\nPrediction (Yes = 1, No = 0):", prediction)
+print("Probability → No:", proba[0], ", Yes:", proba[1])
+
+
+----------------------------------------------------------------------------------------
+7. Write a program to do: A dataset collected in a cosmetics shop showing
+details of customers and whether or not they responded to a special offer
+to buy a new lip-stick is shown in table below. (Use library commands)
+According to the decision tree you have made from the previous training
+data set, what is the decision for the test data: [Age &gt; 35, Income =
+Medium, Gender = Female, Marital Status = Married]?
+
+# Step 1: Import necessary libraries
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.tree import DecisionTreeClassifier
+
+# Step 2: Load dataset (replace with your actual assignment table)
+
+data = pd.DataFrame({
+    'Age': ['<=20','21-35','21-35','<=20','36-50','21-35'],
+    'Income': ['High','High','Low','Medium','Medium','Low'],
+    'Gender': ['Female','Female','Male','Male','Female','Male'],
+    'MaritalStatus': ['Single','Married','Single','Married','Single','Married'],
+    'Buys': ['No','Yes','Yes','No','Yes','No']        
+})
+
+# Step 3: Label encode (convert text → numbers)
+
+le = LabelEncoder()
+for col in data.columns:
+    data[col] = le.fit_transform(data[col])
+
+# Step 4: Split into features and output
+
+X = data.drop('Buys', axis=1)
+y = data['Buys']
+
+# Step 5: Train Decision Tree
+
+model = DecisionTreeClassifier()
+model.fit(X, y)
+
+# Step 6: Test data input
+
+test = pd.DataFrame({
+    'Age': ['>35'],
+    'Income': ['Medium'],
+    'Gender': ['Female'],
+    'MaritalStatus': ['Married']
+})
+
+# Step 7: Encode test data
+
+for col in test.columns:
+    test[col] = le.fit_transform(test[col])
+
+# Step 8: Predict for test case
+
+prediction = model.predict(test)[0]
+
+print("Final Decision for Test Case:",
+      "Buys" if prediction == 1 else "Does NOT Buy")
+
+
+--------------------------------------------------------------------------------------
+8. Write a program to do: A dataset collected in a cosmetics shop showing
+details of customers and whether or not they responded to a special offer
+to buy a new lip-stick is shown in table below. (Use library commands)
+According to the decision tree you have made from the previous training
+data set, what is the decision for the test data: [Age = 21-35, Income =
+Low, Gender = Male, Marital Status = Married]?
+
+# Step 1: Import libraries
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.tree import DecisionTreeClassifier
+
+# Step 2: Load dataset (replace with your actual table)
+
+data = pd.DataFrame({
+    'Age': ['<=20','21-35','21-35','<=20','36-50','21-35'],
+    'Income': ['High','High','Low','Medium','Medium','Low'],
+    'Gender': ['Female','Female','Male','Male','Female','Male'],
+    'MaritalStatus': ['Single','Married','Single','Married','Single','Married'],
+    'Buys': ['No','Yes','Yes','No','Yes','No']   # target column
+})
+
+# Step 3: Encode categorical values
+
+le = LabelEncoder()
+for col in data.columns:
+    data[col] = le.fit_transform(data[col])
+
+# Step 4: Split features and target
+
+X = data.drop('Buys', axis=1)
+y = data['Buys']
+
+# Step 5: Train the Decision Tree
+
+model = DecisionTreeClassifier()
+model.fit(X, y)
+
+# Step 6: Test input
+
+test = pd.DataFrame({
+    'Age': ['21-35'],
+    'Income': ['Low'],
+    'Gender': ['Male'],
+    'MaritalStatus': ['Married']
+})
+
+# Step 7: Encode test values
+
+for col in test.columns:
+    test[col] = le.fit_transform(test[col])
+
+# Step 8: Predict
+
+prediction = model.predict(test)[0]
+print("Final Decision for the Test Case:", "Buys" if prediction==1 else "Does NOT Buy")
+
+
+--------------------------------------------------------------------------------------
+9. Write a program to do the following: You have given a collection of 8
+points. P1=[0.1,0.6] P2=[0.15,0.71] P3=[0.08,0.9] P4=[0.16, 0.85]
+P5=[0.2,0.3] P6=[0.25,0.5] P7=[0.24,0.1] P8=[0.3,0.2]. Perform the k-mean
+clustering with initial centroids as m1=P1 =Cluster#1=C1 and
+m2=P8=cluster#2=C2. Answer the following 1] Which cluster does P6
+belong to? 2] What is the population of a cluster around m2? 3] What is
+the updated value of m1 and m2?
+
+
+
+# Step 1: Define all points
+
+import math
+
+
+points = {
+    "P1": (0.1, 0.6),
+    "P2": (0.15, 0.71),
+    "P3": (0.08, 0.90),
+    "P4": (0.16, 0.85),
+    "P5": (0.2, 0.3),
+    "P6": (0.25, 0.5),
+    "P7": (0.24, 0.1),
+    "P8": (0.3, 0.2)
+}
+
+# Initial centroids
+
+m1 = points["P1"]   
+m2 = points["P8"]   
+
+
+# Step 2: Euclidean distance function
+
+def distance(a, b):
+    return math.sqrt((a[0] - b[0])*2 + (a[1] - b[1])*2)
+
+
+# Step 3: Assign points to clusters
+
+
+C1 = []
+C2 = []
+
+for p, coord in points.items():
+    d1 = distance(coord, m1)
+    d2 = distance(coord, m2)
+    
+    if d1 < d2:
+        C1.append(p)
+    else:
+        C2.append(p)
+
+
+# Step 4: Update centroids
+
+def compute_mean(cluster):
+    x_vals = [points[p][0] for p in cluster]
+    y_vals = [points[p][1] for p in cluster]
+    return (sum(x_vals) / len(x_vals), sum(y_vals) / len(y_vals))
+
+new_m1 = compute_mean(C1)
+new_m2 = compute_mean(C2)
+
+
+# Step 5: Print results
+
+print("Cluster C1:", C1)
+print("Cluster C2:", C2)
+
+print("\nP6 belongs to:", "C1" if "P6" in C1 else "C2")
+print("Population around m2 (C2):", len(C2))
+
+print("\nUpdated Centroid m1 =", new_m1)
+print("Updated Centroid m2 =", new_m2)
+
+-------------------------------------------------------------------------------------
+10. Write a program to do the following: You have given a collection of 8
+points. P1=[2, 10] P2=[2, 5] P3=[8, 4] P4=[5, 8] P5=[7,5] P6=[6, 4] P7=[1, 2]
+P8=[4, 9]. Perform the k-mean clustering with initial centroids as m1=P1
+=Cluster#1=C1 and m2=P4=cluster#2=C2, m3=P7 =Cluster#3=C3. Answer
+the following 1] Which cluster does P6 belong to? 2] What is the
+population of a cluster around m3? 3] What is the updated value of m1,
+m2, m3?
+
+
+import math
+
+# Step 1: Define points and initial centroids
+points = {
+    "P1": (2, 10),
+    "P2": (2, 5),
+    "P3": (8, 4),
+    "P4": (5, 8),
+    "P5": (7, 5),
+    "P6": (6, 4),
+    "P7": (1, 2),
+    "P8": (4, 9)
+}
+
+m1 = points["P1"]
+m2 = points["P4"]
+m3 = points["P7"]
+
+# Step 2: Distance function
+def distance(a, b):
+    return math.sqrt((a[0]-b[0])*2 + (a[1]-b[1])*2)
+
+# Step 3: Assign points to clusters
+C1, C2, C3 = [], [], []
+
+for p, coord in points.items():
+    d1 = distance(coord, m1)
+    d2 = distance(coord, m2)
+    d3 = distance(coord, m3)
+    min_d = min(d1, d2, d3)
+    if min_d == d1:
+        C1.append(p)
+    elif min_d == d2:
+        C2.append(p)
+    else:
+        C3.append(p)
+
+# Step 4: Compute new centroids
+def compute_mean(cluster):
+    x_vals = [points[p][0] for p in cluster]
+    y_vals = [points[p][1] for p in cluster]
+    return (sum(x_vals)/len(x_vals), sum(y_vals)/len(y_vals))
+
+new_m1 = compute_mean(C1)
+new_m2 = compute_mean(C2)
+new_m3 = compute_mean(C3)
+
+# Step 5: Output
+print("Cluster C1:", C1)
+print("Cluster C2:", C2)
+print("Cluster C3:", C3)
+
+print("P6 belongs to:", "C1" if "P6" in C1 else ("C2" if "P6" in C2 else "C3"))
+print("Population around m3 (C3):", len(C3))
+
+print("Updated m1 =", new_m1)
+print("Updated m2 =", new_m2)
+print("Updated m3 =", new_m3)
+
+---------------------------------------------------------------------------------------
+11. Use Iris flower dataset and perform following :
+1. List down the features and their types (e.g., numeric, nominal)
+available in the dataset. 2. Create a histogram for each feature in th
